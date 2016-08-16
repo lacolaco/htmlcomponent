@@ -1,0 +1,22 @@
+{
+  "name": "htmlcomponent",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/jsdom": "^2.0.28",
+    "@types/mocha": "^2.2.29",
+    "@types/node": "^6.0.34",
+    "jsdom": "^9.4.2",
+    "mocha": "^3.0.2",
+    "typescript": "^2.0.0"
+  },
+  "scripts": {
+    "tsc": "tsc -p .",
+    "test": "npm run tsc && mocha"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
