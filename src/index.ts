@@ -1,5 +1,6 @@
-export interface ComponentOptions {
-    template?: string;
+export interface HTMLDirective {
+    selector: string;
+    innerHTML?: string;
     onInit?: (element: Element) => void;
     onDestroy?: (element: Element) => void;
 }
@@ -16,9 +17,9 @@ export class RendereredHTML {
     }
 }
 
-export class HTMLComponentRenderer {
+export class HTMLDirectiveRenderer {
 
-    private _componentMap = new Map<string, ComponentOptions>();
+    private _map = new Map<string, HTMLDirective>();
 
     private _document: Document;
 
@@ -26,8 +27,8 @@ export class HTMLComponentRenderer {
         this._document = d || window.document;
     }
 
-    registerComponent(selector: string, options: ComponentOptions) {
-        this._componentMap.set(selector, options);
+    registerDirective(dir: HTMLDirective) {
+        this._map.set(dir.selector, dir);
     }
 
     render(baseHTML: string): RendereredHTML {
@@ -35,21 +36,21 @@ export class HTMLComponentRenderer {
         host.innerHTML = baseHTML;
 
         const destroyFns = <Function[]>[];
-        this._componentMap.forEach((component, selector) => {
+        this._map.forEach((dir, selector) => {
             const elements = host.querySelectorAll(selector);
             if (!elements || elements.length === 0) {
                 return;
             }
             Array.from(elements).forEach((element: Element) => {
-                if (component.template) {
-                    element.innerHTML = component.template;
+                if (dir.innerHTML) {
+                    element.innerHTML = dir.innerHTML;
                 }
-                if (component.onInit) {
-                    component.onInit(element);
+                if (dir.onInit) {
+                    dir.onInit(element);
                 }
-                if (component.onDestroy) {
+                if (dir.onDestroy) {
                     destroyFns.push(() => {
-                        component.onDestroy(element);
+                        dir.onDestroy(element);
                     });
                 }
             });
